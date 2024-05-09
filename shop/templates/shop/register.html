@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title %}
+{{ block.super }} {{ title }}
+{% endblock title %}
+
+
+{% block main %}
+
+    <!-- Custom Theme files -->
+    <link href="{% static 'css/register.css' %}" rel="stylesheet" type="text/css" media="all"/>
+    <!-- //Custom Theme files -->
+    <!-- web font -->
+    <link href="//fonts.googleapis.com/css?family=Roboto:300,300i,400,400i,700,700i" rel="stylesheet">
+    <!-- //web font -->
+    <style>
+    p {
+
+    }
+    </style>
+
+    <!-- main -->
+    <div class="main-w3layouts wrapper" style="margin-top: 100px">
+        <h1>SignUp</h1>
+        <div class="main-agileinfo">
+            <div class="agileits-top">
+                <form action="#" method="post">
+                    {% csrf_token %}
+                    <p align="left ">Username</p>
+                    {{ form.username }}
+                    <p align="left">Email</p>
+                    {{ form.email }}
+                    <p align=" left">Password</p>
+                    {{ form.password1 }}
+                    <p align="left">Confirm password</p>
+                    {{ form.password2 }}
+                    <input type="submit" value="SIGNUP">
+                </form>
+                <p>Don't have an Account? <a href="{% url 'login' %}"> Login Now!</a></p>
+            </div>
+        </div>
+
+        <ul class="colorlib-bubbles">
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+    </div>
+    <!-- //main -->
+
+{% endblock main %}

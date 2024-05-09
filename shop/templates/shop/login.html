@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}
+    {{ block.super }}{{ title }}
+{% endblock title %}
+
+{% block main %}
+
+
+<link rel="stylesheet" href="{% static 'css/login.css' %}">
+
+      <div class="wrapper" style="margin-top: 150px;">
+         <div class="title">
+            Login
+         </div>
+         <form action="#" method="post">
+             {% csrf_token %}
+            <div class="field">
+                {{ form.username }}
+               <label>Username</label>
+            </div>
+            <div class="field">
+               {{ form.password }}
+               <label>Password</label>
+            </div>
+            <div class="field">
+               <input type="submit" value="Login">
+            </div>
+            <div class="signup-link">
+               Not a member? <a href="{% url 'register' %}">Signup now</a>
+            </div>
+         </form>
+      </div>
+
+
+
+
+{% endblock main %}

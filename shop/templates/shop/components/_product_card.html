@@ -1,0 +1,26 @@
+{% load static %}
+<div class="col-md-6 col-lg-4 col-xl-3">
+    <div class="rounded position-relative fruite-item">
+        <div class="fruite-img">
+            {% if product.image %}
+                <a href="{% url 'detail' product.slug %}">
+                    <img src="{{ product.image.url }}" class="img-fluid w-100 rounded-top" alt="">
+                </a>
+            {% else %}
+                <img src="https://avatars.mds.yandex.net/i?id=6f28a7580d9f6a5d8de392eede993df755faafdf-10928869-images-thumbs&n=13"
+                     class="img-fluid w-100 rounded-top" alt="">
+            {% endif %}
+        </div>
+        <div class="text-white bg-secondary px-3 py-1 rounded position-absolute" style="top: 10px; left: 10px;">
+            {{ product.category.name }}</div>
+        <div class="p-4 border border-secondary border-top-0 rounded-bottom">
+            <h4><a href="{% url 'detail' product.slug %}">{{ product.name }}</a></h4>
+            <p>{{ product.description|truncatewords:10 }}</p>
+            <div class="d-flex justify-content-between flex-lg-wrap">
+                <p class="text-dark fs-5 fw-bold mb-0">${{ product.price }} / kg</p>
+                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i
+                        class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
+            </div>
+        </div>
+    </div>
+</div>

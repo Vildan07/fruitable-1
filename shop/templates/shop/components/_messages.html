@@ -1,0 +1,9 @@
+{% if messages %}
+    <ul class="messages" style="list-style: none; margin: 20px 110px 0 80px; margin-top: 200px">
+        {% for message in messages %}
+            <li class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
+                {{ message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
