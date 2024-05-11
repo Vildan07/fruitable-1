@@ -232,10 +232,11 @@
                         <div class="vesitable-img">
 
                             {% if product.image %}
-                                <img src="{{ product.image.url }}" class="img-fluid w-100 rounded-top" alt="">
+                                <a href="{% url 'detail' product.slug %}"><img src="{{ product.image.url }}" class="img-fluid w-100 rounded-top" alt=""></a>
                             {% else %}
-                                <img src="https://avatars.mds.yandex.net/i?id=9ef659167e46adb06ff1785a6aad11b794f8c36d-9065738-images-thumbs&n=13"
-                                     class="img-fluid w-100 rounded-top" alt="">
+                                <a href="{% url 'detail' product.slug %}">
+                                    <img src="https://avatars.mds.yandex.net/i?id=9ef659167e46adb06ff1785a6aad11b794f8c36d-9065738-images-thumbs&n=13" class="img-fluid w-100 rounded-top" alt="">
+                                </a>
                             {% endif %}
 
                         </div>
@@ -243,7 +244,7 @@
                              style="top: 10px; right: 10px;">
                             {{ product.category.name }}</div>
                         <div class="p-4 rounded-bottom">
-                            <h4>{{ product.name }}</h4>
+                            <a href="{% url 'detail' product.slug %}"><h4>{{ product.name }}</h4></a>
                             <p>{{ product.description|truncatewords:10 }}</p>
                             <div class="d-flex justify-content-between flex-lg-wrap">
                                 <p class="text-dark fs-5 fw-bold mb-0">${{ product.price }} / kg</p>

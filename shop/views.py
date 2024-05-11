@@ -39,8 +39,9 @@ class ProductDetail(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         product = Product.objects.get(slug=self.kwargs['slug'])
-        rating = Rating.objects.filter(product=product, user=self.request.user).first()
-        context['user_rating'] = rating.rating if rating else 0
+        if self.request.user.is_authenticated:
+            rating = Rating.objects.filter(product=product, user=self.request.user).first()
+            context['user_rating'] = rating.rating if rating else 0
         return context
 
 
