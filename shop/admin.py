@@ -7,9 +7,9 @@ from .models import *
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'quantity', 'price', 'category', 'get_image')
+    list_display = ('id', 'name', 'quantity', 'price', 'is_sale', 'category', 'get_image')
     list_display_links = ('name',)
-    list_editable = ('quantity', 'price', 'category')
+    list_editable = ('quantity', 'price', 'category', 'is_sale')
     list_filter = ('category',)
     search_fields = ('name', 'description')
 

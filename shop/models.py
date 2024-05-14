@@ -30,12 +30,29 @@ class Product(models.Model):
     discount = models.FloatField(blank=True, null=True, verbose_name="Скидка")
     quantity = models.IntegerField(default=0, verbose_name="Количество")
     slug = models.SlugField(blank=True, null=True)
+    is_sale = models.IntegerField(default=0)
 
     color = models.CharField(max_length=10, blank=True, null=True, verbose_name="Цвет")
     created = models.DateTimeField(auto_now_add=True, blank=True, null=True, verbose_name="Время создания")
 
-    def average_rating(self) -> float:
-        return Rating.objects.filter(product=self).aggregate(Avg("rating"))["rating__avg"] or 0
+    @property
+    def full_price(self):
+        if self.is_sale > 0:
+            sale_price = self.price * self.is_sale / 100
+            return round(self.price - sale_price, 2)
+        else:
+            return self.price
+
+    @property
+    def avg_rating(self):
+        ratings = self.rating_set.all()
+        if ratings:
+            count = 0
+            for rating in ratings:
+                count += rating.rating
+            return int(count / len(ratings))
+        else:
+            return 0
 
     def __str__(self):
         return self.name
@@ -58,3 +75,12 @@ class Rating(models.Model):
         verbose_name = 'Рейтинг'
         verbose_name_plural = 'Рейтинги продуктов'
         ordering = ['-pk']
+
+
+class Review(models.Model):
+    text = models.TextField()
+    author = models.ForeignKey(User, on_delete=models.CASCADE, blank=True)
+    name = models.CharField(max_length=150, null=True)
+    email = models.EmailField(null=True)
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, blank=True)
+    added = models.DateTimeField(auto_now_add=True)

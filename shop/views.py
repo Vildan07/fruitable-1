@@ -18,12 +18,30 @@ class ProductList(ListView):
     extra_context = {
         'title': 'Barcha productlar',
         'categories': Category.objects.filter(parent=None),
-        'page_name': 'Shop'
+        'page_name': 'Shop',
+        # 'subcategories': Category.objects.filter(parent=products)
     }
+
+    def get_queryset(self):
+        return Product.objects.filter(is_sale=0)
 
 
 class AllProductList(ProductList):
     template_name = 'shop/all_products.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        products = Product.objects.exclude(is_sale=0).order_by('-is_sale')[:3]
+        context['sale_products'] = products
+        return context
+
+
+def by_is_sale(request):
+    context = {
+        'products': Product.objects.exclude(is_sale=0),
+        'page_name': "All Sale Products"
+    }
+    return render(request, 'shop/all_products.html', context=context)
 
 
 class ProductDetail(DetailView):
@@ -33,16 +51,23 @@ class ProductDetail(DetailView):
     extra_context = {
         'title': f"{Product.objects.name} maxsuloti haqida",
         'page_name': 'Shop Detail',
-        'categories': Category.objects.filter(parent=None)
+        'categories': Category.objects.filter(parent=None),
+        'reviews': Review.objects.filter,
+        'products': Product.objects.all()
+
     }
 
     def get_context_data(self, **kwargs):
+        self.products = Product.objects.exclude(is_sale=0).order_by('-is_sale')[:3]
         context = super().get_context_data(**kwargs)
         product = Product.objects.get(slug=self.kwargs['slug'])
+        context['sale_products'] = self.products
         if self.request.user.is_authenticated:
             rating = Rating.objects.filter(product=product, user=self.request.user).first()
             context['user_rating'] = rating.rating if rating else 0
+            context['reviews'] = Review.objects.filter(author=self.request.user, product=product).order_by('-added')
         return context
+
 
 
 def rate(request: HttpRequest, product_id: int, rating: int) -> HttpResponse:
@@ -92,6 +117,21 @@ def user_register(request):
         'title': 'Register'
     }
     return render(request, 'shop/register.html', context=context)
+
+
+def save_review(request: HttpRequest, product_slug):
+    if request.user.is_authenticated:
+        form = ReviewForm(data=request.POST)
+        if form.is_valid():
+            product = Product.objects.get(slug=product_slug)
+            review = form.save(commit=False)
+            review.product = product
+            review.author = request.user
+            review.save()
+        return redirect('detail', slug=product_slug)
+    else:
+        return redirect('login')
+
 
 
 
