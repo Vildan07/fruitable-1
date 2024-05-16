@@ -8,6 +8,8 @@ urlpatterns = [
     path('rate/<int:product_id>/<int:rating>/', rate),
     path('save-review/<slug:product_slug>/', save_review, name='save_review'),
     path('all-sale-products/', by_is_sale, name='by_is_sale'),
+    path('cart/', cart, name='cart'),
+    path('to-cart/<int:product_id>/<str:action>', to_cart, name='to_cart'),
 
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),

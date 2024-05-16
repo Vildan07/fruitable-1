@@ -6,7 +6,7 @@ from django.views.generic import ListView, DetailView, CreateView, UpdateView, D
 
 from .forms import *
 from .models import *
-
+from .utils import CartAuthenticatedUser
 
 # Create your views here.
 
@@ -75,6 +75,38 @@ def rate(request: HttpRequest, product_id: int, rating: int) -> HttpResponse:
     Rating.objects.filter(product=product, user=request.user).delete()
     product.rating_set.create(user=request.user, rating=rating)
     return redirect('detail', slug=product.slug)
+
+
+def cart(request: HttpRequest) -> HttpResponse:
+    if request.user.is_authenticated:
+        cart_info = CartAuthenticatedUser(request).get_cart_info()
+        context = {
+            'order_products': cart_info['order_products'],
+            'cart_total_price': cart_info['cart_total_price'],
+            'cart_total_quantity': cart_info['cart_total_quantity'],
+            'page_name': 'Cart',
+        }
+        return render(request, 'shop/cart.html', context=context)
+    else:
+        return redirect('login')
+
+
+def to_cart(request: HttpRequest, product_id, action) -> HttpResponse:
+    if request.user.is_authenticated:
+        CartAuthenticatedUser(request, product_id, action)
+        page = request.META.get('HTTP_REFERER')
+        return redirect(page)
+    else:
+        return redirect('login')
+
+
+
+
+
+
+
+
+
 
 
 def user_login(request: HttpRequest) -> HttpResponse:

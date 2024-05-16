@@ -17,8 +17,9 @@
             <h4><a href="{% url 'detail' product.slug %}">{{ product.name }}</a></h4>
             <p>{{ product.description|truncatewords:10 }}</p>
             <div class="d-flex justify-content-between flex-lg-wrap">
+                <p class="text-dark fs-5 fw-bold mb-0">In stock: {{ product.quantity }}</p>
                 <p class="text-dark fs-5 fw-bold mb-0">${{ product.price }} / kg</p>
-                <a href="#" class="btn border border-secondary rounded-pill px-3 text-primary"><i
+                <a href="{% url 'to_cart' product.pk 'add' %}" class="btn border border-secondary rounded-pill px-3 text-primary"><i
                         class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
             </div>
         </div>
