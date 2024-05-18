@@ -57,9 +57,9 @@
                                     <p class="mb-0 mt-4">{{ order_product.get_total_price }}</p>
                                 </td>
                                 <td>
-                                    <button class="btn btn-md rounded-circle bg-light border mt-4" >
+                                    <a href="{% url 'to_cart' order_product.product.pk 'delete-product' %}" class="btn btn-md rounded-circle bg-light border mt-4" >
                                         <i class="fa fa-times text-danger"></i>
-                                    </button>
+                                    </a>
                                 </td>
 
                             </tr>
@@ -92,9 +92,9 @@
                             </div>
                             <div class="py-4 mb-4 border-top border-bottom d-flex justify-content-between">
                                 <h5 class="mb-0 ps-4 me-4">Total</h5>
-                                <p class="mb-0 pe-4">$99.00</p>
+                                <p class="mb-0 pe-4">$ {{ get_cart_total_price }}</p>
                             </div>
-                            <button class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</button>
+                            <a href="{% url 'checkout' %}" class="btn border-secondary rounded-pill px-4 py-3 text-primary text-uppercase mb-4 ms-4" type="button">Proceed Checkout</a>
                         </div>
                     </div>
                 </div>

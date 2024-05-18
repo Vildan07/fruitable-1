@@ -2,9 +2,12 @@ from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render, redirect
+from django.urls import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+import stripe
+from django.conf import settings
 
-from .forms import *
+from .forms import CheckoutForm, LoginForm, RegisterForm, ReviewForm
 from .models import *
 from .utils import CartAuthenticatedUser
 
@@ -53,7 +56,8 @@ class ProductDetail(DetailView):
         'page_name': 'Shop Detail',
         'categories': Category.objects.filter(parent=None),
         'reviews': Review.objects.filter,
-        'products': Product.objects.all()
+        'products': Product.objects.all(),
+        'orderproduct': OrderProduct.objects.all()
 
     }
 
@@ -67,6 +71,14 @@ class ProductDetail(DetailView):
             context['user_rating'] = rating.rating if rating else 0
             context['reviews'] = Review.objects.filter(author=self.request.user, product=product).order_by('-added')
         return context
+
+    # def to_cart_detail(self, request: HttpRequest, product_id, action) -> HttpResponse:
+    #     if request.user.is_authenticated:
+    #         CartAuthenticatedUser(request, product_id, action)
+    #         page = self.request.META.get('HTTP_REFERER')
+    #         return redirect(page)
+    #     else:
+    #         return redirect('login')
 
 
 
@@ -99,8 +111,49 @@ def to_cart(request: HttpRequest, product_id, action) -> HttpResponse:
     else:
         return redirect('login')
 
+def create_checkout_session(request: HttpRequest) -> HttpResponse:
+    stripe.api_key = settings.STRIPE_SECRET_KEY
+    user_cart = CartAuthenticatedUser(request)
+    cart_info = user_cart.get_cart_info()
+    total_price = cart_info['cart_total_price']
+    total_quantity = cart_info['cart_total_quantity']
+    session = stripe.checkout.Session.create(
+        line_items=[{
+            'price_data': {
+                'currency': 'usd',
+                'product_data': {
+                    'name': 'Online Shop mahsulotlari'
+                },
+                'unit_amount': int(total_price * 100),
+            },
+            'quantity': total_quantity
+        }],
+        mode='payment',
+        success_url=request.build_absolute_uri(reverse('success_payment')),
+        cancel_url=request.build_absolute_uri(reverse('error_payment')),
+    )
+    return redirect(session.url, 303)
 
 
+def success_payment(request: HttpRequest) -> HttpResponse:
+    return render(request, 'shop/success.html')
+
+
+def error_payment(request: HttpRequest) -> HttpResponse:
+    return render(request, 'shop/error.html')
+
+
+def checkout(request: HttpRequest) -> HttpResponse:
+    form = CheckoutForm(request.POST)
+    if form.is_valid():
+        form.save()
+    else:
+        form = CheckoutForm()
+    context = {
+        'form': form,
+        'page_name': 'Checkout',
+    }
+    return render(request, 'shop/checkout.html', context=context)
 
 
 

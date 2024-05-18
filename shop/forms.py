@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 
-from .models import Review
+from .models import *
 
 
 class LoginForm(AuthenticationForm):
@@ -25,3 +25,14 @@ class ReviewForm(forms.ModelForm):
     class Meta:
         model = Review
         fields = ('name', 'email', 'text')
+
+
+class CheckoutForm(forms.ModelForm):
+    first_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'First Name'}))
+    last_name = forms.CharField(max_length=50, widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Last Name'}))
+
+    class Meta:
+        model = ShippingAddress
+        fields = ('address', 'district', 'city', 'zip_code', 'mobile', 'email')
+
+

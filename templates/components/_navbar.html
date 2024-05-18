@@ -43,15 +43,18 @@
                     <a href="{% url 'cart' %}" class="position-relative me-4 my-auto">
                         <i class="fa fa-shopping-bag fa-2x"></i>
                         <span class="position-absolute bg-secondary rounded-circle d-flex align-items-center justify-content-center text-dark px-1"
-                              style="top: -5px; left: 15px; height: 20px; min-width: 20px;">{{ order_products.cart_total_quantity }}</span>
+                              style="top: -5px; left: 15px; height: 20px; min-width: 20px;">{{ product.order_product.count }}</span>
                     </a>
-
                     <div class="nav-item dropdown">
                         <a href="#" class="my-auto nav-link dropdown-toggle" data-bs-toggle="dropdown"><i class="fas fa-user fa-2x"></i></a>
                         <div class="dropdown-menu m-0 bg-secondary rounded-0">
-                            <a href="{% url 'login' %}" class="dropdown-item">Login</a>
-                            <a href="{% url 'register' %}" class="dropdown-item">Register</a>
-                            <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                            {% if request.user.is_authenticated %}
+                                <a href="{% url 'logout' %}" class="dropdown-item">Logout</a>
+                            {% else %}
+                                <a href="{% url 'login' %}" class="dropdown-item">Login</a>
+                                <a href="{% url 'register' %}" class="dropdown-item">Register</a>
+                            {% endif %}
+
                         </div>
                     </div>
                 </div>

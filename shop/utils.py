@@ -44,9 +44,13 @@ class CartAuthenticatedUser:
         elif action == 'delete':
             order_product.quantity -= 1
             product.quantity += 1
+        elif action == 'delete-product':
+            product.quantity += order_product.quantity
+            order_product.quantity -= product.quantity
 
         order_product.save()
         product.save()
 
         if order_product.quantity <= 0:
             order_product.delete()
+

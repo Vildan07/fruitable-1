@@ -82,19 +82,20 @@
                             </p>
                             <div class="input-group quantity mb-5" style="width: 100px;">
                                 <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-minus rounded-circle bg-light border">
+                                    <a href="{% url 'to_cart'  product.pk 'delete' %}" class="btn btn-sm btn-minus rounded-circle bg-light border">
                                         <i class="fa fa-minus"></i>
-                                    </button>
+                                    </a>
                                 </div>
-                                <input type="text" class="form-control form-control-sm text-center border-0"
-                                       value="1">
+{#                                <input type="text" class="form-control form-control-sm text-center border-0"#}
+{#                                       value="1">#}
+                                {{ order_product.quantity }}
                                 <div class="input-group-btn">
-                                    <button class="btn btn-sm btn-plus rounded-circle bg-light border">
+                                    <a href="{% url 'to_cart' product.pk 'add' %}" class="btn btn-sm btn-plus rounded-circle bg-light border">
                                         <i class="fa fa-plus"></i>
-                                    </button>
+                                    </a>
                                 </div>
                             </div>
-                            <a href="#"
+                            <a href="{% url 'to_cart' product.pk 'add' %}"
                                class="btn border border-secondary rounded-pill px-4 py-2 mb-4 text-primary"><i
                                     class="fa fa-shopping-bag me-2 text-primary"></i> Add to cart</a>
                         </div>

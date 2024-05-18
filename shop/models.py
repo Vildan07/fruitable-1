@@ -112,6 +112,7 @@ class Order(models.Model):
         total_quantity = len(order_products)
         return total_quantity
 
+
 class OrderProduct(models.Model):
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
@@ -138,9 +139,15 @@ class ShippingAddress(models.Model):
 class Region(models.Model):
     name = models.CharField(max_length=150)
 
+    def __str__(self):
+        return self.name
+
 
 class City(models.Model):
     region = models.ForeignKey(Region, on_delete=models.SET_NULL, null=True)
     name = models.CharField(max_length=150)
+
+    def __str__(self):
+        return self.name
 
 

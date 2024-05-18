@@ -45,3 +45,6 @@ class RatingAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Rating, RatingAdmin)
+admin.site.register(City)
+admin.site.register(Region)
+admin.site.register(ShippingAddress)

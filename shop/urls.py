@@ -10,6 +10,12 @@ urlpatterns = [
     path('all-sale-products/', by_is_sale, name='by_is_sale'),
     path('cart/', cart, name='cart'),
     path('to-cart/<int:product_id>/<str:action>', to_cart, name='to_cart'),
+    path('product/<slug:slug>/to-cart/<int:product_id>/<str:action>', to_cart, name='to_cart'),
+    path('checkout/', checkout, name='checkout'),
+
+    path('payment/', create_checkout_session, name='payment'),
+    path('success-payment/', success_payment, name='success_payment'),
+    path('error-payment/', error_payment, name='error_payment'),
 
     path('login/', user_login, name='login'),
     path('logout/', user_logout, name='logout'),
